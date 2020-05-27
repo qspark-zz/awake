@@ -24,9 +24,13 @@ simply remove the comments from these lines:
 
 ### Usage
 
+you can download the app [here.](https://github.com/qspark/awake/releases/tag/1.0)
+
+To build it yourself:
+
 1. Clone this repository
 2. Open "awake.applescript" using "Script Editor" on your mac (edit the script if you need to)
-3. Export the script as application
+3. File -> Export -> File format: Application, check "Stay open after run handler." -> Save
 
 *Disclaimer:* The app, when run in background, will have an energy impact of 0.1 ~ 0.5 in Activity Monitor
 
