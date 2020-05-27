@@ -5,7 +5,20 @@ property clamshell : missing value
 displayStatus()
 copy displayCount to currentCount
 
-repeat
+if displayCount is greater than 2 then
+	activate
+	set answer to button returned of (display dialog "Multiple Monitors Detected" buttons {"Enable Sleep", "Disable Sleep"} default button "Disable Sleep")
+	if answer is "Disable Sleep" then
+		do shell script "pmset -a disablesleep 1" with administrator privileges
+		-- add [user name "me" password "mypassword" with administrator privileges] to skip admin prompt
+	else
+		do shell script "pmset -a disablesleep 0" with administrator privileges
+		-- add [user name "me" password "mypassword" with administrator privileges] to skip admin prompt
+	end if
+end if
+
+on idle
+	
 	displayStatus()
 	
 	if displayCount is greater than currentCount and clamshell is 1 then -- open/new monitor - "ask"
@@ -22,13 +35,12 @@ repeat
 		
 	else if displayCount is less than currentCount and clamshell is 1 then -- open, unplugged - "sleep enabled"
 		do shell script "pmset -a disablesleep 0" with administrator privileges
-		-- add [user name "me" password "mypassword" with administrator privileges] to skip admin prompt
-		
-		(* activate
+		-- add [user name "me" password "mypassword" with administrator privileges] to skip admin prompt	
+		activate
 		set answer to button returned of (display dialog "Monitor Unplugged, Sleep Enabled" buttons {"Stop Monitoring", "Continue Monitoring"} default button "Continue Monitoring")
 		if answer is "Stop Monitoring" then
 			quit me
-		end if *)
+		end if
 		copy displayCount to currentCount
 		
 	else if displayCount is 0 and clamshell is 0 then -- closed, no monitor - "sleep enabled"
@@ -38,9 +50,13 @@ repeat
 		
 	end if
 	
-	delay 3 -- repeat every 3 sec
 	
-end repeat
+	return 3 -- repeat every 3 sec
+end idle
+
+on quit
+	continue quit
+end quit
 
 on displayStatus()
 	tell application "Image Events"
